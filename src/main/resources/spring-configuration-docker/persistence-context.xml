@@ -1,0 +1,68 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:context="http://www.springframework.org/schema/context"
+	xmlns:tx="http://www.springframework.org/schema/tx"
+	xmlns:util="http://www.springframework.org/schema/util"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans
+        http://www.springframework.org/schema/beans/spring-beans.xsd
+        http://www.springframework.org/schema/context
+        http://www.springframework.org/schema/context/spring-context.xsd
+        http://www.springframework.org/schema/tx
+        http://www.springframework.org/schema/tx/spring-tx.xsd
+        http://www.springframework.org/schema/util 
+        http://www.springframework.org/schema/util/spring-util.xsd">
+
+	<context:annotation-config />
+
+	<tx:annotation-driven />
+
+	<bean id="transactionManager"
+		class="org.springframework.jdbc.datasource.DataSourceTransactionManager">
+		<property name="dataSource" ref="dataSource" />
+	</bean>
+
+	<bean id="vendorProperties"
+		class="org.springframework.beans.factory.config.PropertiesFactoryBean">
+		<property name="properties">
+			<props>
+				<prop key="Oracle">oracle</prop>
+				<prop key="H2">h2</prop>
+                <prop key="DB2">db2</prop>
+			</props>
+		</property>
+	</bean>
+
+	<bean id="databaseIdProvider" class="org.apache.ibatis.mapping.VendorDatabaseIdProvider">
+		<property name="properties" ref="vendorProperties" />
+	</bean>
+
+    <util:list id="velaMapperLocations" >
+		<value>classpath*:org/autentia/tutoriales/mappers/sqlmap/*.xml</value>
+   </util:list>
+    
+    <!-- a nivel de aplicación debe existir un bean appMapperLocations con las localizaciones de sus mappers que extienda de velaMapperLocations -->
+    
+	<bean id="sqlSessionFactory" class="org.mybatis.spring.SqlSessionFactoryBean">
+		<property name="mapperLocations" ref="velaMapperLocations" />
+		<property name="dataSource" ref="dataSource" />
+		<property name="configLocation" value="classpath:config/mybatis-config.xml" />
+		<property name="databaseIdProvider" ref="databaseIdProvider" />
+	</bean>
+
+	<bean id="velaBasePackage" class="java.lang.String">
+		<constructor-arg value="org.autentia.tutoriales.mappers" />
+	</bean>
+	
+	<!-- a nivel de aplicación debe existir un bean appBasePackage con los paquetes en los que se encuentran los mappers -->
+	
+	<bean class="org.mybatis.spring.mapper.MapperScannerConfigurer"
+		id="mapperScannerConfigurer">
+		<property name="basePackage" value="#{velaBasePackage}" />
+		<property name="sqlSessionFactoryBeanName" value="sqlSessionFactory" />
+	</bean>
+
+	<bean id="sqlSession" class="org.mybatis.spring.SqlSessionTemplate">
+		<constructor-arg index="0" ref="sqlSessionFactory" />
+	</bean>
+
+</beans>
