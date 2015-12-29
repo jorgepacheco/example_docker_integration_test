@@ -57,7 +57,7 @@
 		<profile>
 			<id>integration</id>
 			<properties>
-				<!-- Only integration tests are run when the integration-test profile 
+				<!-- Only integration tests are run when the integration-test profile
 					is active -->
 				<skip.integration.tests>false</skip.integration.tests>
 				<skip.unit.tests>true</skip.unit.tests>
@@ -66,7 +66,7 @@
 	</profiles>
 
 	<build>
-		<finalName>docker-integration-testing2</finalName>
+		<finalName>example_docker_integration_test</finalName>
 		<plugins>
 			<plugin>
 				<groupId>org.jolokia</groupId>
@@ -85,13 +85,9 @@
 								</assembly>
 							</build>
 							<run>
-								<env>
-									<DB2INST1_PASSWORD>db2inst1</DB2INST1_PASSWORD>
-									<LICENSE>accept</LICENSE>
-								</env>
 								<privileged>true</privileged>
 								<ports>
-									<port>50000:50000</port>
+									<port>50001:50000</port>
 								</ports>
 								<wait>
 									<time>200</time>
@@ -134,7 +130,7 @@
 				<version>${maven.surefire.version}</version>
 				<configuration>
 
-					<!-- Sets the VM argument line used when unit tests are run. 
+					<!-- Sets the VM argument line used when unit tests are run.
 					<argLine>-Dfile.encoding=${project.build.sourceEncoding}
 						${surefireArgLine}</argLine>-->
 					<!-- Skips unit tests if the value of skip.unit.tests property is true -->
@@ -152,7 +148,7 @@
 				<artifactId>maven-failsafe-plugin</artifactId>
 				<version>${maven.failsafe.version}</version>
 				<executions>
-					<!-- Ensures that both integration-test and verify goals of the Failsafe 
+					<!-- Ensures that both integration-test and verify goals of the Failsafe
 						Maven plugin are executed. -->
 					<execution>
 						<id>integration-tests</id>
@@ -164,7 +160,7 @@
 							<!-- Sets the VM argument line used when integration tests are run. -->
 							<argLine>${failsafeArgLine}</argLine>
 
-							<!-- Skips integration tests if the value of skip.integration.tests 
+							<!-- Skips integration tests if the value of skip.integration.tests
 								property is true -->
 							<skipTests>${skip.integration.tests}</skipTests>
 							<includes>
@@ -189,7 +185,7 @@
 		</plugins>
 		<pluginManagement>
 			<plugins>
-				<!--This plugin's configuration is used to store Eclipse m2e settings 
+				<!--This plugin's configuration is used to store Eclipse m2e settings
 					only. It has no influence on the Maven build itself. -->
 				<plugin>
 					<groupId>org.eclipse.m2e</groupId>
@@ -322,7 +318,7 @@
 			<groupId>org.apache.logging.log4j</groupId>
 			<artifactId>log4j-core</artifactId>
 		</dependency>
-		
+
 		<!-- MYBATIS -->
 		<dependency>
 			<groupId>org.mybatis</groupId>
